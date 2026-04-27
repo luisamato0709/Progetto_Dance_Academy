@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Allieve - Olympian’s Dance Academy{% endblock %}
+
+{% block content %}
+<div class="animate-in">
+    <header class="header-container">
+        <div class="header-title">
+            <h1>Gestione Allieve</h1>
+            <p>Anagrafica completa e iscrizioni delle studentesse.</p>
+        </div>
+        <a href="#" class="btn btn-gold">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/></svg>
+            Aggiungi Allieva
+        </a>
+    </header>
+
+    <div class="content-box">
+        <div class="box-header">
+            <h2>Lista Iscritte</h2>
+        </div>
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Allieva</th>
+                        <th>Corso</th>
+                        <th>Contatti</th>
+                        <th>Certificato</th>
+                        <th>Azioni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in allieve %}
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div class="user-avatar" style="width: 35px; height: 35px; font-size: 0.8rem; background: var(--border-color); color: var(--text-main);">
+                                    {{ a.nome[0] }}{{ a.cognome[0] }}
+                                </div>
+                                <span class="course-cell">{{ a.nome }} {{ a.cognome }}</span>
+                            </div>
+                        </td>
+                        <td><span class="badge" style="background: var(--bg-color);">{{ a.nome_corso }}</span></td>
+                        <td>
+                            <div style="font-size: 0.85rem;">{{ a.telefono }}</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">{{ a.email }}</div>
+                        </td>
+                        <td>
+                            {% if a.certificato_medico %}
+                                {% if a.certificato_medico < date_today %}
+                                    <span class="badge badge-overdue">Scaduto ({{ a.certificato_medico[8:10] }}/{{ a.certificato_medico[5:7] }})</span>
+                                {% else %}
+                                    <span class="badge badge-paid">Valido</span>
+                                {% endif %}
+                            {% else %}
+                                <span class="badge badge-overdue">Mancante</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ url_for('allieva_dettaglio', id_allieva=a.id) }}" class="btn btn-outline-purple btn-sm">
+                                Dettagli
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

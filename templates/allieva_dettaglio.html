@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block title %}Dettaglio Allieva - {{ dati.info.nome }} {{ dati.info.cognome }}{% endblock %}
+
+{% block content %}
+<div class="animate-in">
+    <header class="header-container">
+        <div class="header-title">
+            <a href="{{ url_for('allieve') }}" style="text-decoration: none; color: var(--secondary-color); font-weight: 600; display: flex; align-items: center; gap: 4px; margin-bottom: 0.5rem; font-size: 0.9rem;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                Torna all'elenco
+            </a>
+            <h1>{{ dati.info.nome }} {{ dati.info.cognome }}</h1>
+            <p>Scheda anagrafica e riepilogo attività.</p>
+        </div>
+    </header>
+
+    <div class="dashboard-grid">
+        <!-- Info Base -->
+        <div class="content-box">
+            <div class="box-header">
+                <h2>Informazioni Personali</h2>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="display: flex; justify-content: space-between; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border-color);">
+                    <span style="color: var(--text-muted);">Data di Nascita:</span>
+                    <span style="font-weight: 600;">{{ dati.info.data_nascita[8:10] }}/{{ dati.info.data_nascita[5:7] }}/{{ dati.info.data_nascita[0:4] }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border-color);">
+                    <span style="color: var(--text-muted);">Telefono:</span>
+                    <span style="font-weight: 600;">{{ dati.info.telefono }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border-color);">
+                    <span style="color: var(--text-muted);">Email:</span>
+                    <span style="font-weight: 600;">{{ dati.info.email }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border-color);">
+                    <span style="color: var(--text-muted);">Data Iscrizione:</span>
+                    <span style="font-weight: 600;">{{ dati.info.data_iscrizione[8:10] }}/{{ dati.info.data_iscrizione[5:7] }}/{{ dati.info.data_iscrizione[0:4] }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: var(--text-muted);">Corso Attuale:</span>
+                    <span class="badge" style="background: var(--primary-color); color: white;">{{ dati.info.nome_corso }}</span>
+                </div>
+            </div>
+            
+            <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 2px solid var(--border-color);">
+                <h3 style="font-size: 1rem; margin-bottom: 1rem;">Aggiorna Certificato Medico</h3>
+                <form action="{{ url_for('aggiorna_certificato', id_allieva=dati.info.id) }}" method="POST" style="display: flex; gap: 10px;">
+                    <input type="date" name="data_scadenza" value="{{ dati.info.certificato_medico }}" class="btn btn-outline-purple" style="flex: 1; text-align: left; padding: 0.7rem;">
+                    <button type="submit" class="btn btn-gold btn-sm">Salva</button>
+                </form>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.8rem;">
+                    Stato: 
+                    {% if dati.info.certificato_medico %}
+                        {% if dati.info.certificato_medico < date_today %}
+                            <span class="badge badge-overdue">Scaduto il {{ dati.info.certificato_medico[8:10] }}/{{ dati.info.certificato_medico[5:7] }}</span>
+                        {% else %}
+                            <span class="badge badge-paid">Valido fino al {{ dati.info.certificato_medico[8:10] }}/{{ dati.info.certificato_medico[5:7] }}</span>
+                        {% endif %}
+                    {% else %}
+                        <span class="badge badge-overdue">Non inserito</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 2rem;">
+            <!-- Pagamenti -->
+            <div class="content-box">
+                <div class="box-header">
+                    <h2>Ultimi Pagamenti</h2>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Scadenza</th>
+                                <th>Importo</th>
+                                <th>Stato</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for p in dati.pagamenti %}
+                            <tr>
+                                <td>{{ p.data_scadenza[8:10] }}/{{ p.data_scadenza[5:7] }}</td>
+                                <td style="font-weight: 700;">€ {{ "%.2f"|format(p.importo) }}</td>
+                                <td>
+                                    {% if p.stato == 'Pagato' %}
+                                        <span class="badge badge-paid">OK</span>
+                                    {% else %}
+                                        <span class="badge badge-overdue">NO</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <a href="{{ url_for('pagamenti_allieve') }}" class="view-all-link" style="margin-top: 1rem; justify-content: center;">Vai a tutti i pagamenti</a>
+            </div>
+
+            <!-- Costumi -->
+            <div class="content-box">
+                <div class="box-header">
+                    <h2>Costumi Assegnati</h2>
+                </div>
+                {% if dati.costumi %}
+                    {% for c in dati.costumi %}
+                    <div style="background: #fafafa; padding: 1.25rem; border-radius: var(--radius-md); margin-bottom: 0.8rem; border: 1px solid var(--border-color);">
+                        <div style="font-weight: 700; color: var(--secondary-color); margin-bottom: 0.3rem;">{{ c.nome_costume }}</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.8rem;">Coreografia: {{ c.nome_coreografia }}</div>
+                        <div style="display: flex; gap: 10px;">
+                            <span class="badge {% if c.pagato %}badge-paid{% else %}badge-overdue{% endif %}" style="font-size: 0.65rem;">Pagato: {{ 'SÌ' if c.pagato else 'NO' }}</span>
+                            <span class="badge {% if c.consegnato %}badge-paid{% else %}badge-pending{% endif %}" style="font-size: 0.65rem;">Consegnato: {{ 'SÌ' if c.consegnato else 'NO' }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="font-size: 0.9rem; color: var(--text-muted); text-align: center; padding: 1rem;">Nessun costume assegnato.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

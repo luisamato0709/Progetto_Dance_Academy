@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Competizioni - Scuola di Danza{% endblock %}
+
+{% block content %}
+    <h1>Archivio Competizioni</h1>
+    
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Concorso</th>
+                    <th>Classifica</th>
+                    <th>Numero Giudici</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for comp in competizioni %}
+                <tr>
+                    <td>#{{ comp.ID_Concorso }}</td>
+                    <td>
+                        {% if comp.Classifica == 1 %}
+                            <span class="badge" style="background: #FFF8E1; color: #F57F17;">🏆 1° Posto</span>
+                        {% elif comp.Classifica == 2 %}
+                            <span class="badge" style="background: #F5F5F5; color: #757575;">🥈 2° Posto</span>
+                        {% elif comp.Classifica == 3 %}
+                            <span class="badge" style="background: #EFEBE9; color: #5D4037;">🥉 3° Posto</span>
+                        {% elif comp.Classifica %}
+                            {{ comp.Classifica }}° Posto
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>{{ comp.Numero_Giudici }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="3" class="empty-state">Nessuna competizione registrata.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

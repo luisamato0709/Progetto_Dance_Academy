@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Costumi - Olympian’s Dance Academy{% endblock %}
+
+{% block content %}
+<div class="animate-in">
+    <header class="header-container">
+        <div class="header-title">
+            <h1>Gestione Costumi</h1>
+            <p>Inventario, assegnazioni e monitoraggio consegne.</p>
+        </div>
+    </header>
+
+    <div class="content-box">
+        <div class="box-header">
+            <h2>Assegnazione e Stato</h2>
+        </div>
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Allieva</th>
+                        <th>Costume</th>
+                        <th>Taglia</th>
+                        <th>Prezzo</th>
+                        <th>Pagato</th>
+                        <th>Consegnato</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in costumi %}
+                    <tr>
+                        <td class="course-cell">{{ c.nome_allieva }} {{ c.cognome_allieva }}</td>
+                        <td>
+                            <div style="font-weight: 600;">{{ c.nome_costume }}</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">Coreo: {{ c.nome_coreografia }}</div>
+                        </td>
+                        <td><span class="badge" style="background: var(--bg-color);">{{ c.taglia }}</span></td>
+                        <td style="font-weight: 700;">€ {{ "%.2f"|format(c.prezzo) }}</td>
+                        <td>
+                            {% if c.pagato %}
+                                <span class="badge badge-paid">Sì</span>
+                            {% else %}
+                                <span class="badge badge-overdue">No</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if c.consegnato %}
+                                <span class="badge badge-paid">Consegnato</span>
+                            {% else %}
+                                <span class="badge badge-pending">Da consegnare</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

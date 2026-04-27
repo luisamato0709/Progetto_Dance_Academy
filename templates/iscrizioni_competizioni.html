@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Iscrizioni alle Competizioni - Scuola di Danza{% endblock %}
+
+{% block content %}
+    <h1>Iscrizioni alle Competizioni</h1>
+    
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Allieva</th>
+                    <th>ID Concorso</th>
+                    <th>Classifica</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for iscrizione in iscrizioni %}
+                <tr>
+                    <td><strong>{{ iscrizione.Nome }} {{ iscrizione.Cognome }}</strong></td>
+                    <td>#{{ iscrizione.ID_Concorso }}</td>
+                    <td>
+                        {% if iscrizione.Classifica %}
+                            {{ iscrizione.Classifica }}° Posto
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="3" class="empty-state">Nessuna iscrizione registrata.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Certificati Medici - Olympian’s Dance Academy{% endblock %}
+
+{% block content %}
+<div class="animate-in">
+    <header class="header-container">
+        <div class="header-title">
+            <h1>Controllo Certificati Medici</h1>
+            <p>Monitoraggio delle idoneità sportive per la sicurezza delle allieve.</p>
+        </div>
+    </header>
+
+    <div class="content-box">
+        <div class="box-header">
+            <h2 style="color: var(--accent-red);">Certificati Critici</h2>
+        </div>
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Allieva</th>
+                        <th>Scadenza Certificato</th>
+                        <th>Stato</th>
+                        <th>Azione</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in allieve %}
+                    <tr>
+                        <td class="course-cell">{{ a.nome }} {{ a.cognome }}</td>
+                        <td style="font-weight: 600;">
+                            {% if a.certificato_medico %}
+                                {{ a.certificato_medico[8:10] }}/{{ a.certificato_medico[5:7] }}/{{ a.certificato_medico[0:4] }}
+                            {% else %}
+                                <span style="color: var(--text-muted);">Non inserito</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if a.certificato_medico %}
+                                <span class="badge badge-overdue">Scaduto</span>
+                            {% else %}
+                                <span class="badge badge-overdue">Mancante</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ url_for('allieva_dettaglio', id_allieva=a.id) }}" class="btn btn-purple btn-sm">
+                                Aggiorna
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% if not allieve %}
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom: 1rem; opacity: 0.5;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            <br>Ottimo lavoro! Tutti i certificati sono in regola.
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

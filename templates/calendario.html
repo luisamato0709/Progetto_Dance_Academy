@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Calendario - Olympian’s Dance Academy{% endblock %}
+
+{% block content %}
+<div class="animate-in">
+    <header class="header-container">
+        <div class="header-title">
+            <h1>Calendario Lezioni</h1>
+            <p>Programmazione settimanale delle sale e dei corsi.</p>
+        </div>
+    </header>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem;">
+        {% for giorno, lezioni in calendario.items() %}
+        <div class="content-box">
+            <div class="box-header" style="border-bottom: 2px solid var(--border-color); padding-bottom: 0.8rem; margin-bottom: 1rem;">
+                <h2 style="color: var(--secondary-color);">{{ giorno }}</h2>
+                <span class="badge badge-pending">{{ lezioni|length }} Lezioni</span>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Ora</th>
+                            <th>Corso</th>
+                            <th>Sala</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for l in lezioni %}
+                        <tr>
+                            <td class="time-cell">{{ l.ora_inizio }} - {{ l.ora_fine }}</td>
+                            <td>
+                                <div class="course-cell">{{ l.nome_corso }}</div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">{{ l.nome_maestra }} {{ l.cognome_maestra }}</div>
+                            </td>
+                            <td><span class="sala-badge">{{ l.sala }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,6 +1,7 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
+{% load academy_filters %}
 
-{% block title %}Dashboard - Olympian’s Dance Academy{% endblock %}
+{% block title %}Dashboard - Olympianâ€™s Dance Academy{% endblock %}
 
 {% block content %}
 <div class="animate-in">
@@ -113,7 +114,7 @@
         <div class="content-box">
             <div class="box-header">
                 <h2>Lezioni di Oggi</h2>
-                <a href="{{ url_for('calendario') }}" class="view-all-link">
+                <a href="{% url 'calendario' %}" class="view-all-link">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                     Vedi Calendario
                 </a>
@@ -167,11 +168,11 @@
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/></svg>
                         Nuova Iscrizione
                     </a>
-                    <a href="{{ url_for('pagamenti_allieve') }}" class="action-btn btn-purple">
+                    <a href="{% url 'pagamenti_allieve' %}" class="action-btn btn-purple">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
                         Gestione Pagamenti
                     </a>
-                    <a href="{{ url_for('saggio') }}" class="action-btn btn-outline-purple">
+                    <a href="{% url 'saggio' %}" class="action-btn btn-outline-purple">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                         Preparazione Saggio
                     </a>
@@ -180,15 +181,15 @@
                 <div style="border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
                     <div class="box-header" style="margin-bottom: 1rem;">
                         <h3 style="font-size: 1rem; font-weight: 700;">Prossime Scadenze</h3>
-                        <a href="{{ url_for('pagamenti_allieve') }}" class="view-all-link" style="font-size: 0.75rem;">Vedi tutte</a>
+                        <a href="{% url 'pagamenti_allieve' %}" class="view-all-link" style="font-size: 0.75rem;">Vedi tutte</a>
                     </div>
                     <div class="deadlines-list">
                         {% for s in scadenze %}
                         <div class="deadline-item">
-                            <div class="dot" style="background: {% if loop.index == 1 %}#E11D48{% else %}#D4AF37{% endif %};"></div>
+                            <div class="dot" style="background: {% if forloop.counter == 1 %}#E11D48{% else %}#D4AF37{% endif %};"></div>
                             <div class="deadline-name">Pagamento {{ s.tipo }} {{ s.nome }} {{ s.cognome }}</div>
-                            <div class="deadline-amount">€ {{ "%.2f"|format(s.importo) }}</div>
-                            <div class="deadline-date">{{ s.data_scadenza[8:10] }}/{{ s.data_scadenza[5:7] }}/{{ s.data_scadenza[0:4] }}</div>
+                            <div class="deadline-amount">â‚¬ {{ s.importo|floatformat:2 }}</div>
+                            <div class="deadline-date">{{ s.data_scadenza|date_dmy }}</div>
                         </div>
                         {% endfor %}
                     </div>
@@ -200,8 +201,10 @@
 
 <script>
     const now = new Date();
-    const days = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+    const days = ['Domenica', 'LunedÃ¬', 'MartedÃ¬', 'MercoledÃ¬', 'GiovedÃ¬', 'VenerdÃ¬', 'Sabato'];
     const months = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
     document.getElementById('current-date').innerText = `${days[now.getDay()]} ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
 </script>
 {% endblock %}
+
+

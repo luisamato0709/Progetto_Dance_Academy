@@ -1,13 +1,14 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
+{% load academy_filters %}
 
-{% block title %}Pagamenti Allieve - Olympian’s Dance Academy{% endblock %}
+{% block title %}Pagamenti Allieve - Olympianâ€™s Dance Academy{% endblock %}
 
 {% block content %}
 <div class="animate-in">
     <header class="header-container">
         <div class="header-title">
             <h1>Pagamenti Allieve</h1>
-            <p>Gestione delle mensilità e delle scadenze per le studentesse.</p>
+            <p>Gestione delle mensilitÃ  e delle scadenze per le studentesse.</p>
         </div>
     </header>
 
@@ -32,8 +33,8 @@
                     <tr>
                         <td class="course-cell">{{ p.nome_allieva }} {{ p.cognome_allieva }}</td>
                         <td>{{ p.descrizione }}</td>
-                        <td style="font-weight: 600;">€ {{ "%.2f"|format(p.importo) }}</td>
-                        <td style="color: var(--text-muted);">{{ p.data_scadenza[8:10] }}/{{ p.data_scadenza[5:7] }}/{{ p.data_scadenza[0:4] }}</td>
+                        <td style="font-weight: 600;">â‚¬ {{ p.importo|floatformat:2 }}</td>
+                        <td style="color: var(--text-muted);">{{ p.data_scadenza|date_dmy }}</td>
                         <td>
                             {% if p.stato == 'Pagato' %}
                                 <span class="badge badge-paid">Pagato</span>
@@ -45,11 +46,11 @@
                         </td>
                         <td>
                             {% if p.stato != 'Pagato' %}
-                                <a href="{{ url_for('paga_allieva', id_pagamento=p.id) }}" class="btn btn-purple btn-sm">
+                                <a href="{% url 'paga_allieva' p.id %}" class="btn btn-purple btn-sm">
                                     Segna Pagato
                                 </a>
                             {% else %}
-                                <span style="font-size: 0.8rem; color: #166534; font-weight: 600;">Pagato il {{ p.data_pagamento[8:10] }}/{{ p.data_pagamento[5:7] }}/{{ p.data_pagamento[0:4] }}</span>
+                                <span style="font-size: 0.8rem; color: #166534; font-weight: 600;">Pagato il {{ p.data_pagamento|date_dmy }}</span>
                             {% endif %}
                         </td>
                     </tr>
@@ -60,3 +61,5 @@
     </div>
 </div>
 {% endblock %}
+
+

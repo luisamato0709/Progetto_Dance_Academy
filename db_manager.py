@@ -314,6 +314,42 @@ def get_calendario():
         calendario[giorno].append(l)
     return calendario
 
+def get_lezioni_oggi_completo():
+    conn = get_db_connection()
+    giorni = {0: 'LunedÃ¬', 1: 'MartedÃ¬', 2: 'MercoledÃ¬', 3: 'GiovedÃ¬', 4: 'VenerdÃ¬', 5: 'Sabato', 6: 'Domenica'}
+    oggi_sett = giorni[date.today().weekday()]
+    query = '''
+        SELECT l.*, c.nome as nome_corso, m.nome as nome_maestra, m.cognome as cognome_maestra,
+               (SELECT COUNT(*) FROM Allieve WHERE id_corso = l.id_corso) as num_allieve
+        FROM Lezioni l
+        JOIN Corsi c ON l.id_corso = c.id
+        JOIN Maestre m ON l.id_maestra = m.id
+        WHERE l.giorno_settimana = ?
+        ORDER BY l.ora_inizio
+    '''
+    lezioni = conn.execute(query, (oggi_sett,)).fetchall()
+    conn.close()
+    return lezioni
+
+def get_prossime_scadenze(limit=5):
+    conn = get_db_connection()
+    query = '''
+        SELECT 'Allieva' as tipo, a.nome, a.cognome, p.importo, p.data_scadenza
+        FROM Pagamenti_Allieve p
+        JOIN Allieve a ON p.id_allieva = a.id
+        WHERE p.stato != 'Pagato'
+        UNION ALL
+        SELECT 'Maestra' as tipo, m.nome, m.cognome, p.importo, p.data_scadenza
+        FROM Pagamenti_Maestre p
+        JOIN Maestre m ON p.id_maestra = m.id
+        WHERE p.stato != 'Pagato'
+        ORDER BY data_scadenza ASC
+        LIMIT ?
+    '''
+    scadenze = conn.execute(query, (limit,)).fetchall()
+    conn.close()
+    return scadenze
+
 def get_pagamenti_allieve():
     conn = get_db_connection()
     query = '''
@@ -425,4 +461,3 @@ def get_allieve_certificati_critici():
     allieve = conn.execute(query).fetchall()
     conn.close()
     return allieve
-

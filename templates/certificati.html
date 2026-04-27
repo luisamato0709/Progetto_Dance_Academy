@@ -1,13 +1,14 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
+{% load academy_filters %}
 
-{% block title %}Certificati Medici - Olympian’s Dance Academy{% endblock %}
+{% block title %}Certificati Medici - Olympianâ€™s Dance Academy{% endblock %}
 
 {% block content %}
 <div class="animate-in">
     <header class="header-container">
         <div class="header-title">
             <h1>Controllo Certificati Medici</h1>
-            <p>Monitoraggio delle idoneità sportive per la sicurezza delle allieve.</p>
+            <p>Monitoraggio delle idoneitÃ  sportive per la sicurezza delle allieve.</p>
         </div>
     </header>
 
@@ -31,7 +32,7 @@
                         <td class="course-cell">{{ a.nome }} {{ a.cognome }}</td>
                         <td style="font-weight: 600;">
                             {% if a.certificato_medico %}
-                                {{ a.certificato_medico[8:10] }}/{{ a.certificato_medico[5:7] }}/{{ a.certificato_medico[0:4] }}
+                                {{ a.certificato_medico|date_dmy }}
                             {% else %}
                                 <span style="color: var(--text-muted);">Non inserito</span>
                             {% endif %}
@@ -44,7 +45,7 @@
                             {% endif %}
                         </td>
                         <td>
-                            <a href="{{ url_for('allieva_dettaglio', id_allieva=a.id) }}" class="btn btn-purple btn-sm">
+                            <a href="{% url 'allieva_dettaglio' a.id %}" class="btn btn-purple btn-sm">
                                 Aggiorna
                             </a>
                         </td>
@@ -64,3 +65,5 @@
     </div>
 </div>
 {% endblock %}
+
+

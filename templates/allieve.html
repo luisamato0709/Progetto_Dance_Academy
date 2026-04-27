@@ -1,6 +1,7 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
+{% load academy_filters %}
 
-{% block title %}Allieve - Olympian’s Dance Academy{% endblock %}
+{% block title %}Allieve - Olympianâ€™s Dance Academy{% endblock %}
 
 {% block content %}
 <div class="animate-in">
@@ -36,7 +37,7 @@
                         <td>
                             <div style="display: flex; align-items: center; gap: 12px;">
                                 <div class="user-avatar" style="width: 35px; height: 35px; font-size: 0.8rem; background: var(--border-color); color: var(--text-main);">
-                                    {{ a.nome[0] }}{{ a.cognome[0] }}
+                                    {{ a.nome|initial }}{{ a.cognome|initial }}
                                 </div>
                                 <span class="course-cell">{{ a.nome }} {{ a.cognome }}</span>
                             </div>
@@ -49,7 +50,7 @@
                         <td>
                             {% if a.certificato_medico %}
                                 {% if a.certificato_medico < date_today %}
-                                    <span class="badge badge-overdue">Scaduto ({{ a.certificato_medico[8:10] }}/{{ a.certificato_medico[5:7] }})</span>
+                                    <span class="badge badge-overdue">Scaduto ({{ a.certificato_medico|date_dm }})</span>
                                 {% else %}
                                     <span class="badge badge-paid">Valido</span>
                                 {% endif %}
@@ -58,7 +59,7 @@
                             {% endif %}
                         </td>
                         <td>
-                            <a href="{{ url_for('allieva_dettaglio', id_allieva=a.id) }}" class="btn btn-outline-purple btn-sm">
+                            <a href="{% url 'allieva_dettaglio' a.id %}" class="btn btn-outline-purple btn-sm">
                                 Dettagli
                             </a>
                         </td>
@@ -70,3 +71,5 @@
     </div>
 </div>
 {% endblock %}
+
+

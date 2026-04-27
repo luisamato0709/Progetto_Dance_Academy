@@ -1,6 +1,7 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
+{% load academy_filters %}
 
-{% block title %}Calendario - Olympian’s Dance Academy{% endblock %}
+{% block title %}Calendario - Olympianâ€™s Dance Academy{% endblock %}
 
 {% block content %}
 <div class="animate-in">
@@ -12,7 +13,7 @@
     </header>
 
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem;">
-        {% for giorno, lezioni in calendario.items() %}
+        {% for giorno, lezioni in calendario.items %}
         <div class="content-box">
             <div class="box-header" style="border-bottom: 2px solid var(--border-color); padding-bottom: 0.8rem; margin-bottom: 1rem;">
                 <h2 style="color: var(--secondary-color);">{{ giorno }}</h2>
@@ -46,3 +47,5 @@
     </div>
 </div>
 {% endblock %}
+
+

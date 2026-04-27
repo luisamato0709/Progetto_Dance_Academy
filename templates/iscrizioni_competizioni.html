@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+﻿{% extends "base.html" %}
 
 {% block title %}Iscrizioni alle Competizioni - Scuola di Danza{% endblock %}
 
@@ -21,7 +21,7 @@
                     <td>#{{ iscrizione.ID_Concorso }}</td>
                     <td>
                         {% if iscrizione.Classifica %}
-                            {{ iscrizione.Classifica }}° Posto
+                            {{ iscrizione.Classifica }}Â° Posto
                         {% else %}
                             -
                         {% endif %}
@@ -36,3 +36,5 @@
         </table>
     </div>
 {% endblock %}
+
+

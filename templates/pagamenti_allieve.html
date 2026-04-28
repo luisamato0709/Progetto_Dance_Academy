@@ -1,14 +1,14 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load academy_filters %}
 
-{% block title %}Pagamenti Allieve - Olympianâ€™s Dance Academy{% endblock %}
+{% block title %}Pagamenti Allieve - Olympian's Dance Academy{% endblock %}
 
 {% block content %}
 <div class="animate-in">
     <header class="header-container">
         <div class="header-title">
             <h1>Pagamenti Allieve</h1>
-            <p>Gestione delle mensilitÃ  e delle scadenze per le studentesse.</p>
+            <p>Gestione delle mensilità e delle scadenze per le studentesse.</p>
         </div>
     </header>
 
@@ -33,7 +33,7 @@
                     <tr>
                         <td class="course-cell">{{ p.nome_allieva }} {{ p.cognome_allieva }}</td>
                         <td>{{ p.descrizione }}</td>
-                        <td style="font-weight: 600;">â‚¬ {{ p.importo|floatformat:2 }}</td>
+                        <td style="font-weight: 600;">€ {{ p.importo|floatformat:2 }}</td>
                         <td style="color: var(--text-muted);">{{ p.data_scadenza|date_dmy }}</td>
                         <td>
                             {% if p.stato == 'Pagato' %}

@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}Aggiungi Coreografia - Olympian's Dance Academy{% endblock %}
+
+{% block content %}
+<div class="animate-in">
+    <header class="header-container">
+        <div class="header-title">
+            <a href="{% url 'saggio' %}" style="text-decoration: none; color: var(--secondary-color); font-weight: 600; display: flex; align-items: center; gap: 4px; margin-bottom: 0.5rem; font-size: 0.9rem;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                Torna a Saggio
+            </a>
+            <h1>Aggiungi Coreografia</h1>
+            <p>Inserisci una nuova esibizione nella scaletta dello spettacolo.</p>
+        </div>
+    </header>
+
+    <div class="content-box" style="max-width: 800px; margin: 0 auto;">
+        <form method="POST" action="{% url 'nuova_coreografia' %}" class="form-container">
+            {% csrf_token %}
+            
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <div class="form-group">
+                    <label for="nome" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Nome Coreografia / Titolo Brano</label>
+                    <input type="text" id="nome" name="nome" required placeholder="es. Il risveglio dei fiori" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+                </div>
+                <div class="form-group">
+                    <label for="id_saggio" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Saggio Associato</label>
+                    <select id="id_saggio" name="id_saggio" required style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: white;">
+                        {% for s in saggi %}
+                        <option value="{{ s.id }}">{{ s.titolo }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <div class="form-group">
+                    <label for="id_corso" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Corso</label>
+                    <select id="id_corso" name="id_corso" required style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: white;">
+                        {% for c in corsi %}
+                        <option value="{{ c.id }}">{{ c.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="id_maestra" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Maestra</label>
+                    <select id="id_maestra" name="id_maestra" required style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: white;">
+                        {% for m in maestre %}
+                        <option value="{{ m.id }}">{{ m.nome }} {{ m.cognome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <div class="form-group">
+                    <label for="atto" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Atto</label>
+                    <input type="number" id="atto" name="atto" value="1" min="1" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+                </div>
+                <div class="form-group">
+                    <label for="ordine_uscita" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Ordine di Uscita</label>
+                    <input type="number" id="ordine_uscita" name="ordine_uscita" required placeholder="es. 1" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                <div class="form-group">
+                    <label for="musica" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Musica (Titolo e Autore)</label>
+                    <input type="text" id="musica" name="musica" placeholder="es. Tchaikovsky - Waltz of the Flowers" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+                </div>
+                <div class="form-group">
+                    <label for="durata" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Durata (min)</label>
+                    <input type="number" id="durata" name="durata" value="4" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <a href="{% url 'saggio' %}" class="btn btn-outline-purple">Annulla</a>
+                <button type="submit" class="btn btn-gold">Salva Coreografia</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

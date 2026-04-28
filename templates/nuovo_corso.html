@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Aggiungi Corso - Olympian's Dance Academy{% endblock %}
+
+{% block content %}
+<div class="animate-in">
+    <header class="header-container">
+        <div class="header-title">
+            <a href="{% url 'corsi' %}" style="text-decoration: none; color: var(--secondary-color); font-weight: 600; display: flex; align-items: center; gap: 4px; margin-bottom: 0.5rem; font-size: 0.9rem;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                Torna ai Corsi
+            </a>
+            <h1>Aggiungi Corso</h1>
+            <p>Configura un nuovo corso nell'offerta formativa dell'accademia.</p>
+        </div>
+    </header>
+
+    <div class="content-box" style="max-width: 800px; margin: 0 auto;">
+        <form method="POST" action="{% url 'nuovo_corso' %}" class="form-container">
+            {% csrf_token %}
+            
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label for="nome" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Nome Corso</label>
+                <input type="text" id="nome" name="nome" required placeholder="es. Danza Classica Avanzato" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <div class="form-group">
+                    <label for="livello" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Livello</label>
+                    <select id="livello" name="livello" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: white;">
+                        <option value="Propedeutica">Propedeutica</option>
+                        <option value="Base">Base</option>
+                        <option value="Intermedio">Intermedio</option>
+                        <option value="Avanzato">Avanzato</option>
+                        <option value="Open">Open</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="fascia_eta" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Fascia Età</label>
+                    <input type="text" id="fascia_eta" name="fascia_eta" placeholder="es. 6-10 anni" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 2rem;">
+                <label for="id_maestra" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Maestra / Docente Associata</label>
+                <select id="id_maestra" name="id_maestra" required style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: white;">
+                    <option value="">Seleziona docente...</option>
+                    {% for m in maestre %}
+                    <option value="{{ m.id }}">{{ m.nome }} {{ m.cognome }} ({{ m.specializzazione }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <a href="{% url 'corsi' %}" class="btn btn-outline-purple">Annulla</a>
+                <button type="submit" class="btn btn-gold">Crea Corso</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

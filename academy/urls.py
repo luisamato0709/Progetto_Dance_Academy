@@ -22,4 +22,10 @@ urlpatterns = [
     ),
     path("paga-allieva/<int:id_pagamento>/", views.paga_allieva, name="paga_allieva"),
     path("paga-maestra/<int:id_pagamento>/", views.paga_maestra, name="paga_maestra"),
+    path("nuova-allieva/", views.nuova_allieva, name="nuova_allieva"),
+    path("nuova-maestra/", views.nuova_maestra, name="nuova_maestra"),
+    path("nuovo-corso/", views.nuovo_corso, name="nuovo_corso"),
+    path("nuovo-saggio/", views.nuovo_saggio, name="nuovo_saggio"),
+    path("nuova-coreografia/", views.nuova_coreografia, name="nuova_coreografia"),
+    path("modifica-coreografia/<int:id_coreografia>/", views.modifica_coreografia, name="modifica_coreografia"),
 ]

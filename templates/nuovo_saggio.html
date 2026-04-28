@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Nuovo Saggio - Olympian's Dance Academy{% endblock %}
+
+{% block content %}
+<div class="animate-in">
+    <header class="header-container">
+        <div class="header-title">
+            <a href="{% url 'saggio' %}" style="text-decoration: none; color: var(--secondary-color); font-weight: 600; display: flex; align-items: center; gap: 4px; margin-bottom: 0.5rem; font-size: 0.9rem;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                Torna a Saggio
+            </a>
+            <h1>Crea Nuovo Saggio</h1>
+            <p>Configura l'evento principale dell'anno accademico.</p>
+        </div>
+    </header>
+
+    <div class="content-box" style="max-width: 800px; margin: 0 auto;">
+        <form method="POST" action="{% url 'nuovo_saggio' %}" class="form-container">
+            {% csrf_token %}
+            
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label for="titolo" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Titolo dello Spettacolo</label>
+                <input type="text" id="titolo" name="titolo" required placeholder="es. Gran Galà 2026: Sogni in Movimento" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <div class="form-group">
+                    <label for="data" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Data</label>
+                    <input type="date" id="data" name="data" required style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+                </div>
+                <div class="form-group">
+                    <label for="ora_inizio" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Ora Inizio</label>
+                    <input type="time" id="ora_inizio" name="ora_inizio" required style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label for="luogo" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Luogo / Teatro</label>
+                <input type="text" id="luogo" name="luogo" placeholder="es. Teatro Manzoni" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                <div class="form-group">
+                    <label for="stato" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Stato</label>
+                    <select id="stato" name="stato" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: white;">
+                        <option value="In preparazione">In preparazione</option>
+                        <option value="Programmato">Programmato</option>
+                        <option value="Concluso">Concluso</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="numero_atti" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Numero Atti</label>
+                    <input type="number" id="numero_atti" name="numero_atti" value="2" min="1" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+                </div>
+                <div class="form-group">
+                    <label for="durata_totale" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Durata Stimata (min)</label>
+                    <input type="number" id="durata_totale" name="durata_totale" value="120" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <a href="{% url 'saggio' %}" class="btn btn-outline-purple">Annulla</a>
+                <button type="submit" class="btn btn-gold">Crea Saggio</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

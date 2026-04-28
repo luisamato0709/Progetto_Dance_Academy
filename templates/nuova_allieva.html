@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Nuova Iscrizione - Olympian's Dance Academy{% endblock %}
+
+{% block content %}
+<div class="animate-in">
+    <header class="header-container">
+        <div class="header-title">
+            <a href="{% url 'index' %}" style="text-decoration: none; color: var(--secondary-color); font-weight: 600; display: flex; align-items: center; gap: 4px; margin-bottom: 0.5rem; font-size: 0.9rem;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                Torna alla Dashboard
+            </a>
+            <h1>Nuova Iscrizione</h1>
+            <p>Inserisci i dati per registrare una nuova allieva nel sistema.</p>
+        </div>
+    </header>
+
+    <div class="content-box" style="max-width: 800px; margin: 0 auto;">
+        <form method="POST" action="{% url 'nuova_allieva' %}" class="form-container">
+            {% csrf_token %}
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <div class="form-group">
+                    <label for="nome" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Nome</label>
+                    <input type="text" id="nome" name="nome" required style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+                </div>
+                <div class="form-group">
+                    <label for="cognome" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Cognome</label>
+                    <input type="text" id="cognome" name="cognome" required style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <div class="form-group">
+                    <label for="data_nascita" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Data di Nascita</label>
+                    <input type="date" id="data_nascita" name="data_nascita" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+                </div>
+                <div class="form-group">
+                    <label for="telefono" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Telefono</label>
+                    <input type="text" id="telefono" name="telefono" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label for="email" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Email</label>
+                <input type="email" id="email" name="email" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                <div class="form-group">
+                    <label for="id_corso" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Corso</label>
+                    <select id="id_corso" name="id_corso" required style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: white;">
+                        <option value="">Seleziona un corso...</option>
+                        {% for c in corsi %}
+                        <option value="{{ c.id }}">{{ c.nome }} ({{ c.livello }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="data_iscrizione" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Data Iscrizione</label>
+                    <input type="date" id="data_iscrizione" name="data_iscrizione" value="{{ today|date:'Y-m-d' }}" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 2rem;">
+                <label for="certificato_medico" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Scadenza Certificato Medico</label>
+                <input type="date" id="certificato_medico" name="certificato_medico" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+            </div>
+
+            <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <a href="{% url 'index' %}" class="btn btn-outline-purple">Annulla</a>
+                <button type="submit" class="btn btn-gold">Salva Iscrizione</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

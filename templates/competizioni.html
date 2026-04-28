@@ -1,4 +1,4 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
 
 {% block title %}Competizioni - Scuola di Danza{% endblock %}
 
@@ -20,13 +20,13 @@
                     <td>#{{ comp.ID_Concorso }}</td>
                     <td>
                         {% if comp.Classifica == 1 %}
-                            <span class="badge" style="background: #FFF8E1; color: #F57F17;">ðŸ† 1Â° Posto</span>
+                            <span class="badge" style="background: #FFF8E1; color: #F57F17;">ðŸ† 1° Posto</span>
                         {% elif comp.Classifica == 2 %}
-                            <span class="badge" style="background: #F5F5F5; color: #757575;">ðŸ¥ˆ 2Â° Posto</span>
+                            <span class="badge" style="background: #F5F5F5; color: #757575;">ðŸ¥ˆ 2° Posto</span>
                         {% elif comp.Classifica == 3 %}
-                            <span class="badge" style="background: #EFEBE9; color: #5D4037;">ðŸ¥‰ 3Â° Posto</span>
+                            <span class="badge" style="background: #EFEBE9; color: #5D4037;">ðŸ¥‰ 3° Posto</span>
                         {% elif comp.Classifica %}
-                            {{ comp.Classifica }}Â° Posto
+                            {{ comp.Classifica }}° Posto
                         {% else %}
                             -
                         {% endif %}

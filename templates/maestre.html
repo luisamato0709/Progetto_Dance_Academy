@@ -1,7 +1,7 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load academy_filters %}
 
-{% block title %}Maestre - Olympianâ€™s Dance Academy{% endblock %}
+{% block title %}Maestre - Olympian's Dance Academy{% endblock %}
 
 {% block content %}
 <div class="animate-in">
@@ -10,6 +10,10 @@
             <h1>Corpo Docente</h1>
             <p>Le professioniste e i professionisti della nostra accademia.</p>
         </div>
+        <a href="{% url 'nuova_maestra' %}" class="btn btn-gold">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="16" y1="11" x2="22" y2="11"/></svg>
+            Aggiungi Docente
+        </a>
     </header>
 
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
@@ -36,7 +40,7 @@
                 </div>
                 <div style="display: flex; justify-content: space-between;">
                     <span style="color: var(--text-muted); font-size: 0.85rem;">Compenso:</span>
-                    <span style="font-weight: 700; color: var(--secondary-color);">â‚¬ {{ m.compenso_mensile|floatformat:2 }} / mese</span>
+                    <span style="font-weight: 700; color: var(--secondary-color);">€ {{ m.compenso_mensile|floatformat:2 }} / mese</span>
                 </div>
             </div>
 

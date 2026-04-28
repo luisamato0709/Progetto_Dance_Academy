@@ -101,7 +101,10 @@ def init_db():
         titolo TEXT NOT NULL,
         data DATE,
         luogo TEXT,
-        descrizione TEXT
+        ora_inizio TEXT,
+        stato TEXT DEFAULT 'In preparazione',
+        numero_atti INTEGER DEFAULT 1,
+        durata_totale INTEGER DEFAULT 0
     )''')
 
     cursor.execute('''
@@ -111,6 +114,10 @@ def init_db():
         id_saggio INTEGER,
         id_corso INTEGER,
         id_maestra INTEGER,
+        atto INTEGER DEFAULT 1,
+        ordine_uscita INTEGER,
+        musica TEXT,
+        durata INTEGER,
         FOREIGN KEY (id_saggio) REFERENCES Saggi(id),
         FOREIGN KEY (id_corso) REFERENCES Corsi(id),
         FOREIGN KEY (id_maestra) REFERENCES Maestre(id)
@@ -316,7 +323,7 @@ def get_calendario():
 
 def get_lezioni_oggi_completo():
     conn = get_db_connection()
-    giorni = {0: 'LunedÃ¬', 1: 'MartedÃ¬', 2: 'MercoledÃ¬', 3: 'GiovedÃ¬', 4: 'VenerdÃ¬', 5: 'Sabato', 6: 'Domenica'}
+    giorni = {0: 'Lunedì', 1: 'Martedì', 2: 'Mercoledì', 3: 'Giovedì', 4: 'Venerdì', 5: 'Sabato', 6: 'Domenica'}
     oggi_sett = giorni[date.today().weekday()]
     query = '''
         SELECT l.*, c.nome as nome_corso, m.nome as nome_maestra, m.cognome as cognome_maestra,
@@ -400,8 +407,19 @@ def get_saggi_completo():
             JOIN Corsi c ON cor.id_corso = c.id
             JOIN Maestre m ON cor.id_maestra = m.id
             WHERE cor.id_saggio = ?
+            ORDER BY cor.atto, cor.ordine_uscita
         '''
-        s_dict['coreografie'] = conn.execute(query_coreo, (s['id'],)).fetchall()
+        coreografie = conn.execute(query_coreo, (s['id'],)).fetchall()
+        
+        # Raggruppa per atto
+        atti = {}
+        for c in coreografie:
+            atto_num = c['atto']
+            if atto_num not in atti:
+                atti[atto_num] = []
+            atti[atto_num].append(c)
+        
+        s_dict['atti'] = atti
         saggi_list.append(s_dict)
     conn.close()
     return saggi_list
@@ -461,3 +479,61 @@ def get_allieve_certificati_critici():
     allieve = conn.execute(query).fetchall()
     conn.close()
     return allieve
+def add_allieva(nome, cognome, data_nascita, telefono, email, data_iscrizione, id_corso, certificato_medico):
+    conn = get_db_connection()
+    conn.execute('''
+        INSERT INTO Allieve (nome, cognome, data_nascita, telefono, email, data_iscrizione, id_corso, certificato_medico)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    ''', (nome, cognome, data_nascita, telefono, email, data_iscrizione, id_corso, certificato_medico))
+    conn.commit()
+    conn.close()
+def add_maestra(nome, cognome, telefono, email, specializzazione, compenso_mensile):
+    conn = get_db_connection()
+    conn.execute('''
+        INSERT INTO Maestre (nome, cognome, telefono, email, specializzazione, compenso_mensile)
+        VALUES (?, ?, ?, ?, ?, ?)
+    ''', (nome, cognome, telefono, email, specializzazione, compenso_mensile))
+    conn.commit()
+    conn.close()
+
+def add_corso(nome, livello, fascia_eta, id_maestra):
+    conn = get_db_connection()
+    conn.execute('''
+        INSERT INTO Corsi (nome, livello, fascia_eta, id_maestra)
+        VALUES (?, ?, ?, ?)
+    ''', (nome, livello, fascia_eta, id_maestra))
+    conn.commit()
+    conn.close()
+def add_saggio(titolo, data, luogo, ora_inizio, stato, numero_atti, durata_totale):
+    conn = get_db_connection()
+    conn.execute('''
+        INSERT INTO Saggi (titolo, data, luogo, ora_inizio, stato, numero_atti, durata_totale)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    ''', (titolo, data, luogo, ora_inizio, stato, numero_atti, durata_totale))
+    conn.commit()
+    conn.close()
+
+def add_coreografia(nome, id_saggio, id_corso, id_maestra, atto, ordine_uscita, musica, durata):
+    conn = get_db_connection()
+    conn.execute('''
+        INSERT INTO Coreografie (nome, id_saggio, id_corso, id_maestra, atto, ordine_uscita, musica, durata)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    ''', (nome, id_saggio, id_corso, id_maestra, atto, ordine_uscita, musica, durata))
+    conn.commit()
+    conn.close()
+def get_coreografia(id_coreografia):
+    conn = get_db_connection()
+    query = 'SELECT * FROM Coreografie WHERE id = ?'
+    coreo = conn.execute(query, (id_coreografia,)).fetchone()
+    conn.close()
+    return coreo
+
+def update_coreografia(id_coreografia, nome, id_corso, id_maestra, atto, ordine_uscita, musica, durata):
+    conn = get_db_connection()
+    conn.execute('''
+        UPDATE Coreografie 
+        SET nome = ?, id_corso = ?, id_maestra = ?, atto = ?, ordine_uscita = ?, musica = ?, durata = ?
+        WHERE id = ?
+    ''', (nome, id_corso, id_maestra, atto, ordine_uscita, musica, durata, id_coreografia))
+    conn.commit()
+    conn.close()

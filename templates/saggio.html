@@ -1,62 +1,122 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load academy_filters %}
 
-{% block title %}Saggio - Olympianâ€™s Dance Academy{% endblock %}
+{% block title %}Saggio - Olympian's Dance Academy{% endblock %}
 
 {% block content %}
 <div class="animate-in">
     <header class="header-container">
         <div class="header-title">
-            <h1>Gran GalÃ  di Fine Anno</h1>
-            <p>Organizzazione e preparazione del saggio accademico.</p>
+            <h1>Gran Galà di Fine Anno</h1>
+            <p>Organizzazione e preparazione dello spettacolo accademico.</p>
+        </div>
+        <div style="display: flex; gap: 1rem;">
+            <a href="{% url 'nuovo_saggio' %}" class="btn btn-outline-purple">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Nuovo Saggio
+            </a>
+            <a href="{% url 'nuova_coreografia' %}" class="btn btn-gold">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                Aggiungi Coreografia
+            </a>
         </div>
     </header>
 
-    {% for s in saggi %}
-    <div class="content-box" style="margin-bottom: 2.5rem;">
-        <div class="header-container" style="margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
-            <div class="header-title">
-                <h2 style="font-size: 1.8rem; color: var(--secondary-color);">{{ s.titolo }}</h2>
-                <p>{{ s.descrizione }}</p>
+    {% if saggi %}
+        {% for s in saggi %}
+        <div class="content-box" style="margin-bottom: 2.5rem; border-left: 5px solid var(--secondary-color);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem;">
+                <div>
+                    <h2 style="font-size: 2rem; color: var(--text-main); margin-bottom: 0.5rem;">{{ s.titolo }}</h2>
+                    <div style="display: flex; gap: 1.5rem; color: var(--text-muted); font-size: 0.95rem;">
+                        <span style="display: flex; align-items: center; gap: 6px;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            {{ s.data|date_dmy }}
+                        </span>
+                        <span style="display: flex; align-items: center; gap: 6px;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            {{ s.luogo }}
+                        </span>
+                        <span style="display: flex; align-items: center; gap: 6px;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            Ore {{ s.ora_inizio }}
+                        </span>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <span class="badge {% if s.stato == 'Concluso' %}badge-paid{% elif s.stato == 'Programmato' %}badge-pending{% else %}badge-overdue{% endif %}" style="font-size: 0.8rem; padding: 0.5rem 1rem;">
+                        {{ s.stato }}
+                    </span>
+                    <div style="margin-top: 0.8rem; font-size: 0.85rem; font-weight: 600;">
+                        {{ s.numero_atti }} ATTI • {{ s.durata_totale }} MINUTI
+                    </div>
+                </div>
             </div>
-            <div class="date-badge" style="background: var(--bg-color);">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                {{ s.data|date_dmy }} @ {{ s.luogo }}
-            </div>
-        </div>
 
-        <div class="box-header">
-            <h3>Coreografie in Preparazione</h3>
+            {% if s.atti %}
+                {% for atto_num, coreografie in s.atti.items %}
+                <div style="margin-top: 2rem;">
+                    <h3 style="font-size: 1.1rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--secondary-color); border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem; margin-bottom: 1.5rem;">
+                        Atto {{ atto_num }}
+                    </h3>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 60px;">#</th>
+                                    <th>Coreografia</th>
+                                    <th>Corso / Maestra</th>
+                                    <th>Musica</th>
+                                    <th style="text-align: right;">Durata</th>
+                                    <th style="text-align: right;">Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for c in coreografie %}
+                                <tr>
+                                    <td style="font-weight: 800; color: var(--primary-color);">{{ c.ordine_uscita }}</td>
+                                    <td>
+                                        <div style="font-weight: 700; font-size: 1rem;">{{ c.nome }}</div>
+                                    </td>
+                                    <td>
+                                        <div style="font-weight: 600;">{{ c.nome_corso }}</div>
+                                        <div style="font-size: 0.75rem; color: var(--text-muted);">{{ c.nome_maestra }} {{ c.cognome_maestra }}</div>
+                                    </td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem;">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                                            {{ c.musica }}
+                                        </div>
+                                    </td>
+                                    <td style="text-align: right; font-weight: 600;">{{ c.durata }} min</td>
+                                    <td style="text-align: right;">
+                                        <a href="{% url 'modifica_coreografia' c.id %}" class="btn btn-outline-purple btn-sm" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                                            Modifica
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div style="text-align: center; padding: 3rem; background: #fafafa; border-radius: var(--radius-md); color: var(--text-muted);">
+                    Nessuna coreografia inserita per questo saggio.
+                </div>
+            {% endif %}
         </div>
-        <div class="table-container">
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Nome Coreografia</th>
-                        <th>Corso</th>
-                        <th>Maestra</th>
-                        <th>Allieve</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for c in s.coreografie %}
-                    <tr>
-                        <td class="course-cell" style="color: var(--primary-color);">{{ c.nome }}</td>
-                        <td><span class="badge" style="background: var(--bg-color);">{{ c.nome_corso }}</span></td>
-                        <td style="font-weight: 600;">{{ c.nome_maestra }} {{ c.cognome_maestra }}</td>
-                        <td>
-                            <div style="display: flex; align-items: center; gap: 5px;">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-                                {{ c.num_allieve }}
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        {% endfor %}
+    {% else %}
+        <div class="content-box" style="text-align: center; padding: 5rem;">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 1.5rem; opacity: 0.3;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <h2 style="color: var(--text-muted);">Nessun saggio presente</h2>
+            <p style="color: var(--text-muted); margin-top: 1rem;">Inizia a programmare il tuo prossimo grande spettacolo.</p>
+            <a href="{% url 'nuovo_saggio' %}" class="btn btn-gold" style="margin-top: 2rem;">Crea Primo Saggio</a>
         </div>
-    </div>
-    {% endfor %}
+    {% endif %}
 </div>
 {% endblock %}
 

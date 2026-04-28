@@ -1,7 +1,7 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load academy_filters %}
 
-{% block title %}Pagamenti Maestre - Olympianâ€™s Dance Academy{% endblock %}
+{% block title %}Pagamenti Maestre - Olympian's Dance Academy{% endblock %}
 
 {% block content %}
 <div class="animate-in">
@@ -33,7 +33,7 @@
                     <tr>
                         <td class="course-cell">{{ p.nome_maestra }} {{ p.cognome_maestra }}</td>
                         <td>{{ p.descrizione }}</td>
-                        <td style="font-weight: 600;">â‚¬ {{ p.importo|floatformat:2 }}</td>
+                        <td style="font-weight: 600;">€ {{ p.importo|floatformat:2 }}</td>
                         <td style="color: var(--text-muted);">{{ p.data_scadenza|date_dmy }}</td>
                         <td>
                             {% if p.stato == 'Pagato' %}

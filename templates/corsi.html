@@ -1,7 +1,7 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load academy_filters %}
 
-{% block title %}Corsi - Olympianâ€™s Dance Academy{% endblock %}
+{% block title %}Corsi - Olympian's Dance Academy{% endblock %}
 
 {% block content %}
 <div class="animate-in">
@@ -10,6 +10,10 @@
             <h1>Offerta Formativa</h1>
             <p>I corsi disponibili per l'anno accademico corrente.</p>
         </div>
+        <a href="{% url 'nuovo_corso' %}" class="btn btn-gold">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            Aggiungi Corso
+        </a>
     </header>
 
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
@@ -24,7 +28,7 @@
                     <span class="badge" style="background: var(--bg-color);">{{ c.livello }}</span>
                 </div>
                 <div style="display: flex; justify-content: space-between;">
-                    <span style="color: var(--text-muted); font-size: 0.85rem;">Fascia EtÃ :</span>
+                    <span style="color: var(--text-muted); font-size: 0.85rem;">Fascia Età:</span>
                     <span style="font-weight: 600;">{{ c.fascia_eta }}</span>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center;">

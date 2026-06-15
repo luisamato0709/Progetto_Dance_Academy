@@ -1,92 +1,117 @@
-# Progetto Dance Academy
-Gestione di una scuola di danza: allieve, maestre, corsi, saggi, pagamenti e certificati.
+# Olympian's Dance Academy
 
-## Contenuto
-- Applicazione Django `academy` con template e static files
-- Database SQLite di sviluppo: `Scuola.db` (NON committare in produzione)
-- File di dump SQL: `dump.sql` (solo per import/backup)
+![Logo Olympian's Dance Academy](static/images/logo.png)
 
-## Requisiti
-- Python 3.10+
-- `pip` (gestore pacchetti)
-- Windows / macOS / Linux
+Gestionale web Django per organizzare le attivita di una scuola di danza: anagrafiche, corsi, calendario lezioni, pagamenti, certificati, costumi e preparazione del saggio.
 
-## Installazione locale (sviluppo)
-1. Crea e attiva un ambiente virtuale:
+## Funzionalita principali
+
+- **Dashboard iniziale** con riepilogo di allieve, maestre, corsi attivi, lezioni del giorno, pagamenti in scadenza, costumi da consegnare e stato del saggio.
+- **Calendario lezioni** con giorni, orari, sale, corsi e maestre assegnate.
+- **Gestione allieve** con dati anagrafici, contatti, corso frequentato, certificato medico e scheda di dettaglio.
+- **Gestione maestre** con contatti, specializzazione e compenso mensile.
+- **Gestione corsi** con livello, fascia di eta e maestra responsabile.
+- **Pagamenti allieve e maestre** con importo, scadenza, stato e registrazione del pagamento.
+- **Certificati medici** con elenco delle allieve con certificato mancante o in scadenza.
+- **Saggio di fine anno** con saggi, coreografie, ordine di uscita, atti, musiche, durata, corsi e maestre collegate.
+- **Costumi** con inventario, stato ordine, assegnazioni, consegna e pagamento.
+- **Form di inserimento e modifica** per allieve, maestre, corsi, saggi e coreografie.
+
+## Tecnologie utilizzate
+
+- **Python** come linguaggio principale.
+- **Django 5.0.6** per routing, template, configurazione e avvio dell'applicazione web.
+- **SQLite** come database locale tramite il file `Scuola.db`.
+- **HTML template Django** nella cartella `templates/`.
+- **CSS personalizzato** in `static/css/style.css`.
+- **File statici** nella cartella `static/`, con immagini in `static/images/`.
+- **db_manager.py** per le query e le funzioni operative sul database.
+
+File principali:
+
+- `manage.py`: comandi Django.
+- `dance_academy/settings.py`: configurazione del progetto.
+- `dance_academy/urls.py`: routing principale, inclusa l'area admin.
+- `academy/urls.py`: pagine dell'applicazione.
+- `academy/views.py`: viste Django.
+- `academy/models.py`: modelli dati.
+- `db_manager.py`: accesso operativo al database SQLite.
+
+## Installazione ed avvio
+
+Requisiti consigliati:
+
+- Python 3.10 o superiore.
+- pip.
+
+Da PowerShell, nella cartella del progetto:
 
 ```powershell
-py -3 -m venv .venv
+py -m venv .venv
 .\.venv\Scripts\Activate.ps1
-```
-
-2. Installa le dipendenze:
-
-```powershell
 pip install -r requirements.txt
 ```
 
-3. Imposta variabili d'ambiente (esempio in PowerShell, temporaneo per la sessione):
+Il progetto include gia il database locale `Scuola.db`. Per controllare la configurazione Django:
 
 ```powershell
-#$ per sviluppo: sostituisci con valori sicuri in produzione
-$env:DJANGO_SECRET_KEY = "replace-with-a-secret"
-$env:DJANGO_DEBUG = "True"
+py manage.py check
 ```
 
-4. Esegui migrazioni e crea un superuser:
-
-```powershell
-py manage.py makemigrations
-py manage.py migrate
-py manage.py createsuperuser
-```
-
-5. Avvia il server di sviluppo:
+Per avviare il server di sviluppo:
 
 ```powershell
 py manage.py runserver
 ```
 
-Apri `http://127.0.0.1:8000/` nel browser.
+Aprire poi il browser su:
 
-## Database e dump
-- Il progetto usa SQLite per sviluppo (`Scuola.db`). Non committare file di database nel repository.
-- Se hai `dump.sql`, puoi importarne il contenuto in un DB SQLite o usarlo come riferimento. Per SQLite:
-
-```powershell
-sqlite3 Scuola.db < dump.sql
+```text
+http://127.0.0.1:8000/
 ```
 
-Nota: ho aggiunto `Scuola.db` e `dump.sql` a `.gitignore` per evitare commit accidentali.
+Pagine utili:
 
-## Sicurezza e produzione
-- Non pubblicare `SECRET_KEY` nel repo. Usa variabili d'ambiente (es. `DJANGO_SECRET_KEY`) o un file `.env` escluso da Git.
-- Imposta `DJANGO_DEBUG=False` in produzione.
-- Rimuovi dati sensibili dalla storia Git se sono già stati committati (vedi prossimo paragrafo).
+- `http://127.0.0.1:8000/` - dashboard.
+- `http://127.0.0.1:8000/admin/` - area admin Django.
+- `http://127.0.0.1:8000/allieve/` - gestione allieve.
+- `http://127.0.0.1:8000/corsi/` - gestione corsi.
+- `http://127.0.0.1:8000/saggio/` - gestione saggio e coreografie.
 
-## Preparare il repository per GitHub
-Se hai già committato il DB o il dump, rimuovili dalla storia prima di pubblicare. Comandi consigliati:
+Variabili opzionali:
 
 ```powershell
-git rm --cached Scuola.db dump.sql
-git commit -m "Remove local DB and dump from repository"
-git push
+$env:DJANGO_SECRET_KEY = "sostituisci_con_una_chiave_sicura"
+$env:DJANGO_DEBUG = "True"
 ```
 
-Per rimuovere definitivamente dalla storia usa strumenti come `git filter-repo` o `git filter-branch` con attenzione.
-
-## Test
-Esegui la suite di test Django:
+Per eseguire i test:
 
 ```powershell
 py manage.py test
 ```
 
-## Contribuire
-- Apri una issue per bug o feature
-- Fork, branch feature e pull request
+## Interfaccia web
 
-## Note finali
-- Ho creato/aggiornato alcune buone pratiche nel repo: usare variabili d'ambiente per `SECRET_KEY` e `DEBUG`, e mantenere il DB locale fuori dal controllo versione.
-- Se vuoi, posso aggiungere un file `.env.example`, script di setup, o una `LICENSE`.
+L'interfaccia usa una sidebar laterale con logo e navigazione verso tutte le aree principali:
 
+- Dashboard
+- Calendario
+- Allieve
+- Maestre
+- Corsi
+- Pagamenti Allieve
+- Pagamenti Maestre
+- Saggio
+- Costumi
+- Certificati
+
+La dashboard mostra statistiche e scadenze operative, mentre le sezioni interne usano tabelle, badge di stato e pulsanti per le azioni principali.
+
+Screenshot della dashboard:
+
+![Dashboard gestionale](static/images/screencapture-127-0-0-1-8000-2026-06-11-10_41_54.png)
+
+## Licenza
+
+Questo progetto e distribuito con licenza **MIT**. La licenza permette di usare, copiare, modificare e distribuire il software, mantenendo il riferimento al copyright originale. Il software viene fornito senza garanzie: per il testo completo consultare il file `LICENSE`.

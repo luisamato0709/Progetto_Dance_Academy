@@ -12,6 +12,7 @@ class Maestra(models.Model):
     compenso_mensile = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
     
     class Meta:
+        db_table = 'Maestre'
         ordering = ['cognome', 'nome']
         verbose_name_plural = "Maestre"
     
@@ -31,13 +32,22 @@ class Corso(models.Model):
     nome = models.CharField(max_length=150)
     livello = models.CharField(max_length=50, choices=LIVELLI, blank=True, null=True)
     fascia_eta = models.CharField(max_length=100, blank=True, null=True)
-    id_maestra = models.ForeignKey(Maestra, on_delete=models.SET_NULL, null=True, related_name='corsi')
+    id_maestra = models.ForeignKey(Maestra, on_delete=models.SET_NULL, null=True, related_name='corsi', db_column='id_maestra')
     
     class Meta:
+        db_table = 'Corsi'
         ordering = ['nome']
     
     def __str__(self):
         return self.nome
+
+    @property
+    def nome_maestra(self):
+        return self.id_maestra.nome if self.id_maestra else ""
+
+    @property
+    def cognome_maestra(self):
+        return self.id_maestra.cognome if self.id_maestra else ""
 
 
 class Allieva(models.Model):
@@ -48,15 +58,20 @@ class Allieva(models.Model):
     telefono = models.CharField(max_length=20, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     data_iscrizione = models.DateField(blank=True, null=True)
-    id_corso = models.ForeignKey(Corso, on_delete=models.SET_NULL, null=True, related_name='allieve')
+    id_corso = models.ForeignKey(Corso, on_delete=models.SET_NULL, null=True, related_name='allieve', db_column='id_corso')
     certificato_medico = models.DateField(blank=True, null=True, help_text="Data di scadenza del certificato medico")
     
     class Meta:
+        db_table = 'Allieve'
         ordering = ['cognome', 'nome']
         verbose_name_plural = "Allieve"
     
     def __str__(self):
         return f"{self.nome} {self.cognome}"
+
+    @property
+    def nome_corso(self):
+        return self.id_corso.nome if self.id_corso else ""
 
 
 class Lezione(models.Model):
@@ -75,14 +90,27 @@ class Lezione(models.Model):
     ora_inizio = models.TimeField()
     ora_fine = models.TimeField()
     sala = models.CharField(max_length=50, blank=True, null=True)
-    id_corso = models.ForeignKey(Corso, on_delete=models.CASCADE, related_name='lezioni')
-    id_maestra = models.ForeignKey(Maestra, on_delete=models.SET_NULL, null=True, related_name='lezioni')
+    id_corso = models.ForeignKey(Corso, on_delete=models.CASCADE, related_name='lezioni', db_column='id_corso')
+    id_maestra = models.ForeignKey(Maestra, on_delete=models.SET_NULL, null=True, related_name='lezioni', db_column='id_maestra')
     
     class Meta:
+        db_table = 'Lezioni'
         ordering = ['giorno_settimana', 'ora_inizio']
     
     def __str__(self):
         return f"{self.id_corso.nome} - {self.giorno_settimana} {self.ora_inizio}"
+
+    @property
+    def nome_corso(self):
+        return self.id_corso.nome if self.id_corso else ""
+
+    @property
+    def nome_maestra(self):
+        return self.id_maestra.nome if self.id_maestra else ""
+
+    @property
+    def cognome_maestra(self):
+        return self.id_maestra.cognome if self.id_maestra else ""
 
 
 class PagamentoAllieva(models.Model):
@@ -93,7 +121,7 @@ class PagamentoAllieva(models.Model):
         ('In ritardo', 'In ritardo'),
     ]
     
-    id_allieva = models.ForeignKey(Allieva, on_delete=models.CASCADE, related_name='pagamenti')
+    id_allieva = models.ForeignKey(Allieva, on_delete=models.CASCADE, related_name='pagamenti', db_column='id_allieva')
     importo = models.DecimalField(max_digits=8, decimal_places=2)
     data_scadenza = models.DateField()
     data_pagamento = models.DateField(blank=True, null=True)
@@ -101,10 +129,19 @@ class PagamentoAllieva(models.Model):
     descrizione = models.CharField(max_length=200, blank=True, null=True)
     
     class Meta:
+        db_table = 'Pagamenti_Allieve'
         ordering = ['-data_scadenza']
     
     def __str__(self):
         return f"Pagamento {self.id_allieva.cognome} - {self.descrizione}"
+
+    @property
+    def nome_allieva(self):
+        return self.id_allieva.nome if self.id_allieva else ""
+
+    @property
+    def cognome_allieva(self):
+        return self.id_allieva.cognome if self.id_allieva else ""
 
 
 class PagamentoMaestra(models.Model):
@@ -115,7 +152,7 @@ class PagamentoMaestra(models.Model):
         ('In ritardo', 'In ritardo'),
     ]
     
-    id_maestra = models.ForeignKey(Maestra, on_delete=models.CASCADE, related_name='pagamenti')
+    id_maestra = models.ForeignKey(Maestra, on_delete=models.CASCADE, related_name='pagamenti', db_column='id_maestra')
     importo = models.DecimalField(max_digits=8, decimal_places=2)
     data_scadenza = models.DateField()
     data_pagamento = models.DateField(blank=True, null=True)
@@ -123,10 +160,19 @@ class PagamentoMaestra(models.Model):
     descrizione = models.CharField(max_length=200, blank=True, null=True)
     
     class Meta:
+        db_table = 'Pagamenti_Maestre'
         ordering = ['-data_scadenza']
     
     def __str__(self):
         return f"Pagamento {self.id_maestra.cognome} - {self.descrizione}"
+
+    @property
+    def nome_maestra(self):
+        return self.id_maestra.nome if self.id_maestra else ""
+
+    @property
+    def cognome_maestra(self):
+        return self.id_maestra.cognome if self.id_maestra else ""
 
 
 class Saggio(models.Model):
@@ -147,6 +193,7 @@ class Saggio(models.Model):
     durata_totale = models.IntegerField(default=0, help_text="Durata in minuti")
     
     class Meta:
+        db_table = 'Saggi'
         ordering = ['data']
     
     def __str__(self):
@@ -156,20 +203,33 @@ class Saggio(models.Model):
 class Coreografia(models.Model):
     """Modello per le coreografie"""
     nome = models.CharField(max_length=200)
-    id_saggio = models.ForeignKey(Saggio, on_delete=models.CASCADE, related_name='coreografie')
-    id_corso = models.ForeignKey(Corso, on_delete=models.SET_NULL, null=True, related_name='coreografie')
-    id_maestra = models.ForeignKey(Maestra, on_delete=models.SET_NULL, null=True, related_name='coreografie')
+    id_saggio = models.ForeignKey(Saggio, on_delete=models.CASCADE, related_name='coreografie', db_column='id_saggio')
+    id_corso = models.ForeignKey(Corso, on_delete=models.SET_NULL, null=True, related_name='coreografie', db_column='id_corso')
+    id_maestra = models.ForeignKey(Maestra, on_delete=models.SET_NULL, null=True, related_name='coreografie', db_column='id_maestra')
     atto = models.IntegerField(default=1)
     ordine_uscita = models.IntegerField(blank=True, null=True)
     musica = models.CharField(max_length=200, blank=True, null=True)
     durata = models.IntegerField(blank=True, null=True, help_text="Durata in secondi")
     
     class Meta:
+        db_table = 'Coreografie'
         ordering = ['id_saggio', 'atto', 'ordine_uscita']
         verbose_name_plural = "Coreografie"
     
     def __str__(self):
         return f"{self.nome} - {self.id_saggio.titolo}"
+
+    @property
+    def nome_corso(self):
+        return self.id_corso.nome if self.id_corso else ""
+
+    @property
+    def nome_maestra(self):
+        return self.id_maestra.nome if self.id_maestra else ""
+
+    @property
+    def cognome_maestra(self):
+        return self.id_maestra.cognome if self.id_maestra else ""
 
 
 class Costume(models.Model):
@@ -189,6 +249,7 @@ class Costume(models.Model):
     stato_ordine = models.CharField(max_length=50, choices=STATI_ORDINE, default='In magazzino')
     
     class Meta:
+        db_table = 'Costumi'
         ordering = ['nome']
     
     def __str__(self):
@@ -197,14 +258,39 @@ class Costume(models.Model):
 
 class AssegnazioneCostume(models.Model):
     """Modello per l'assegnazione dei costumi alle allieve"""
-    id_allieva = models.ForeignKey(Allieva, on_delete=models.CASCADE, related_name='costumi_assegnati')
-    id_costume = models.ForeignKey(Costume, on_delete=models.CASCADE, related_name='assegnazioni')
-    id_coreografia = models.ForeignKey(Coreografia, on_delete=models.CASCADE, related_name='assegnazioni_costumi')
+    id_allieva = models.ForeignKey(Allieva, on_delete=models.CASCADE, related_name='costumi_assegnati', db_column='id_allieva')
+    id_costume = models.ForeignKey(Costume, on_delete=models.CASCADE, related_name='assegnazioni', db_column='id_costume')
+    id_coreografia = models.ForeignKey(Coreografia, on_delete=models.CASCADE, related_name='assegnazioni_costumi', db_column='id_coreografia')
     pagato = models.BooleanField(default=False)
     consegnato = models.BooleanField(default=False)
     
     class Meta:
+        db_table = 'Assegnazione_Costumi'
         verbose_name_plural = "Assegnazioni Costumi"
     
     def __str__(self):
         return f"{self.id_allieva.cognome} - {self.id_costume.nome}"
+
+    @property
+    def nome_allieva(self):
+        return self.id_allieva.nome if self.id_allieva else ""
+
+    @property
+    def cognome_allieva(self):
+        return self.id_allieva.cognome if self.id_allieva else ""
+
+    @property
+    def nome_costume(self):
+        return self.id_costume.nome if self.id_costume else ""
+
+    @property
+    def taglia(self):
+        return self.id_costume.taglia if self.id_costume else ""
+
+    @property
+    def prezzo(self):
+        return self.id_costume.prezzo if self.id_costume else None
+
+    @property
+    def nome_coreografia(self):
+        return self.id_coreografia.nome if self.id_coreografia else ""

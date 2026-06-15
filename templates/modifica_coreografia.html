@@ -29,7 +29,7 @@
                     <label for="id_corso" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Corso</label>
                     <select id="id_corso" name="id_corso" required style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: white;">
                         {% for c in corsi %}
-                        <option value="{{ c.id }}" {% if c.id == coreo.id_corso %}selected{% endif %}>{{ c.nome }}</option>
+                        <option value="{{ c.id }}" {% if c.id == coreo.id_corso_id %}selected{% endif %}>{{ c.nome }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -37,7 +37,7 @@
                     <label for="id_maestra" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Maestra</label>
                     <select id="id_maestra" name="id_maestra" required style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: white;">
                         {% for m in maestre %}
-                        <option value="{{ m.id }}" {% if m.id == coreo.id_maestra %}selected{% endif %}>{{ m.nome }} {{ m.cognome }}</option>
+                        <option value="{{ m.id }}" {% if m.id == coreo.id_maestra_id %}selected{% endif %}>{{ m.nome }} {{ m.cognome }}</option>
                         {% endfor %}
                     </select>
                 </div>

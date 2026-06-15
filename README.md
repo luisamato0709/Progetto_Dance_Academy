@@ -20,12 +20,11 @@ Gestionale web Django per organizzare le attivita di una scuola di danza: anagra
 ## Tecnologie utilizzate
 
 - **Python** come linguaggio principale.
-- **Django 5.0.6** per routing, template, configurazione e avvio dell'applicazione web.
+- **Django 5.0.6** per routing, template, ORM, configurazione e avvio dell'applicazione web.
 - **SQLite** come database locale tramite il file `Scuola.db`.
 - **HTML template Django** nella cartella `templates/`.
 - **CSS personalizzato** in `static/css/style.css`.
 - **File statici** nella cartella `static/`, con immagini in `static/images/`.
-- **db_manager.py** per le query e le funzioni operative sul database.
 
 File principali:
 
@@ -33,9 +32,8 @@ File principali:
 - `dance_academy/settings.py`: configurazione del progetto.
 - `dance_academy/urls.py`: routing principale, inclusa l'area admin.
 - `academy/urls.py`: pagine dell'applicazione.
-- `academy/views.py`: viste Django.
-- `academy/models.py`: modelli dati.
-- `db_manager.py`: accesso operativo al database SQLite.
+- `academy/views.py`: viste Django e query tramite ORM.
+- `academy/models.py`: modelli dati collegati alle tabelle SQLite.
 
 ## Installazione ed avvio
 

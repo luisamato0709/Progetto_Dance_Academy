@@ -24,3 +24,5 @@ backup_and_prepare.py
 # Logs
 *.log
 
+
+dump.sql

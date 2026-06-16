@@ -20,11 +20,11 @@ from .models import (
 
 
 GIORNI_SETTIMANA = {
-    0: "LunedÃ¬",
-    1: "MartedÃ¬",
-    2: "MercoledÃ¬",
-    3: "GiovedÃ¬",
-    4: "VenerdÃ¬",
+    0: "Lunedì",
+    1: "Martedì",
+    2: "Mercoledì",
+    3: "Giovedì",
+    4: "Venerdì",
     5: "Sabato",
     6: "Domenica",
 }

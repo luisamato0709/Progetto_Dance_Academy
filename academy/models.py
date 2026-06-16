@@ -294,3 +294,29 @@ class AssegnazioneCostume(models.Model):
     @property
     def nome_coreografia(self):
         return self.id_coreografia.nome if self.id_coreografia else ""
+
+
+class Competizione(models.Model):
+    """Modello per le competizioni"""
+    id_concorso = models.AutoField(primary_key=True)
+    classifica = models.IntegerField(blank=True, null=True)
+    numero_giudici = models.IntegerField()
+
+    class Meta:
+        db_table = 'Competizione'
+
+    def __str__(self):
+        return f"Competizione {self.id_concorso}"
+
+
+class IscrizioneCompetizione(models.Model):
+    """Modello per le iscrizioni alle competizioni"""
+    id_allieva = models.ForeignKey(Allieva, on_delete=models.CASCADE, related_name='iscrizioni_competizioni', db_column='id_allieva')
+    id_concorso = models.ForeignKey(Competizione, on_delete=models.CASCADE, related_name='iscrizioni', db_column='id_concorso')
+
+    class Meta:
+        db_table = 'Iscrizione_Competizione'
+        unique_together = (('id_allieva', 'id_concorso'),)
+
+    def __str__(self):
+        return f"{self.id_allieva} -> {self.id_concorso}"

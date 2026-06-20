@@ -5,15 +5,20 @@ venv/
 db.sqlite3
 .env
 .DS_Store
+Thumbs.db
+scratch/
 
 # Keep the final database tracked; ignore legacy/sporco backups
+Scuola_backup_*.db
 Scuola_legacy.db
 Scuola_sporco.db
 Scuola_sporco_2.db
 Scuola_pulito_vuoto_backup.db
+Scuola_pulito_vuoto_*.db
 
 # SQL dumps to ignore
 dump_legacy_backup.sql
+dump.sql
 
 # Development / maintenance scripts not included in final push
 check_db.py
@@ -23,6 +28,3 @@ backup_and_prepare.py
 
 # Logs
 *.log
-
-
-dump.sql

@@ -271,7 +271,7 @@ def nuova_allieva(request):
             telefono=_blank_to_none(request.POST.get("telefono")),
             email=_blank_to_none(request.POST.get("email")),
             data_iscrizione=_blank_to_none(request.POST.get("data_iscrizione")),
-            id_corso_id=_blank_to_none(request.POST.get("id_corso")),
+            id_corso_id=request.POST.get("id_corso"),
             certificato_medico=_blank_to_none(
                 request.POST.get("certificato_medico")
             ),
@@ -306,7 +306,7 @@ def nuovo_corso(request):
             nome=request.POST.get("nome"),
             livello=_blank_to_none(request.POST.get("livello")),
             fascia_eta=_blank_to_none(request.POST.get("fascia_eta")),
-            id_maestra_id=_blank_to_none(request.POST.get("id_maestra")),
+            id_maestra_id=request.POST.get("id_maestra"),
         )
         return redirect("corsi")
 
@@ -334,8 +334,8 @@ def nuova_coreografia(request):
         Coreografia.objects.create(
             nome=request.POST.get("nome"),
             id_saggio_id=request.POST.get("id_saggio"),
-            id_corso_id=_blank_to_none(request.POST.get("id_corso")),
-            id_maestra_id=_blank_to_none(request.POST.get("id_maestra")),
+            id_corso_id=request.POST.get("id_corso"),
+            id_maestra_id=request.POST.get("id_maestra"),
             atto=_int_or_default(request.POST.get("atto"), 1),
             ordine_uscita=_blank_to_none(request.POST.get("ordine_uscita")),
             musica=_blank_to_none(request.POST.get("musica")),
@@ -359,8 +359,8 @@ def modifica_coreografia(request, id_coreografia):
 
     if request.method == "POST":
         coreo.nome = request.POST.get("nome")
-        coreo.id_corso_id = _blank_to_none(request.POST.get("id_corso"))
-        coreo.id_maestra_id = _blank_to_none(request.POST.get("id_maestra"))
+        coreo.id_corso_id = request.POST.get("id_corso")
+        coreo.id_maestra_id = request.POST.get("id_maestra")
         coreo.atto = _int_or_default(request.POST.get("atto"), 1)
         coreo.ordine_uscita = _blank_to_none(request.POST.get("ordine_uscita"))
         coreo.musica = _blank_to_none(request.POST.get("musica"))

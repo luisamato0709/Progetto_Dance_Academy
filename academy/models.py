@@ -32,7 +32,7 @@ class Corso(models.Model):
     nome = models.CharField(max_length=150)
     livello = models.CharField(max_length=50, choices=LIVELLI, blank=True, null=True)
     fascia_eta = models.CharField(max_length=100, blank=True, null=True)
-    id_maestra = models.ForeignKey(Maestra, on_delete=models.SET_NULL, null=True, related_name='corsi', db_column='id_maestra')
+    id_maestra = models.ForeignKey(Maestra, on_delete=models.PROTECT, related_name='corsi', db_column='id_maestra')
     
     class Meta:
         db_table = 'Corsi'
@@ -58,7 +58,7 @@ class Allieva(models.Model):
     telefono = models.CharField(max_length=20, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     data_iscrizione = models.DateField(blank=True, null=True)
-    id_corso = models.ForeignKey(Corso, on_delete=models.SET_NULL, null=True, related_name='allieve', db_column='id_corso')
+    id_corso = models.ForeignKey(Corso, on_delete=models.PROTECT, related_name='allieve', db_column='id_corso')
     certificato_medico = models.DateField(blank=True, null=True, help_text="Data di scadenza del certificato medico")
     
     class Meta:
@@ -91,7 +91,7 @@ class Lezione(models.Model):
     ora_fine = models.TimeField()
     sala = models.CharField(max_length=50, blank=True, null=True)
     id_corso = models.ForeignKey(Corso, on_delete=models.CASCADE, related_name='lezioni', db_column='id_corso')
-    id_maestra = models.ForeignKey(Maestra, on_delete=models.SET_NULL, null=True, related_name='lezioni', db_column='id_maestra')
+    id_maestra = models.ForeignKey(Maestra, on_delete=models.PROTECT, related_name='lezioni', db_column='id_maestra')
     
     class Meta:
         db_table = 'Lezioni'
@@ -204,8 +204,8 @@ class Coreografia(models.Model):
     """Modello per le coreografie"""
     nome = models.CharField(max_length=200)
     id_saggio = models.ForeignKey(Saggio, on_delete=models.CASCADE, related_name='coreografie', db_column='id_saggio')
-    id_corso = models.ForeignKey(Corso, on_delete=models.SET_NULL, null=True, related_name='coreografie', db_column='id_corso')
-    id_maestra = models.ForeignKey(Maestra, on_delete=models.SET_NULL, null=True, related_name='coreografie', db_column='id_maestra')
+    id_corso = models.ForeignKey(Corso, on_delete=models.PROTECT, related_name='coreografie', db_column='id_corso')
+    id_maestra = models.ForeignKey(Maestra, on_delete=models.PROTECT, related_name='coreografie', db_column='id_maestra')
     atto = models.IntegerField(default=1)
     ordine_uscita = models.IntegerField(blank=True, null=True)
     musica = models.CharField(max_length=200, blank=True, null=True)
